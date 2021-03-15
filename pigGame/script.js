@@ -6,6 +6,14 @@ const playerOneCurrentScorePlaceholder = document.querySelector('#current--0');
 const playerTwoCurrentScorePlaceholder = document.querySelector('#current--1');
 const playerOneSection = document.querySelector('.player--0');
 const playerTwoSection = document.querySelector('.player--1');
+const imageSrcList = [
+  'dice-1.png',
+  'dice-2.png',
+  'dice-3.png',
+  'dice-4.png',
+  'dice-5.png',
+  'dice-6.png',
+];
 
 const playerOneScore = {
   finalScore: 0,
@@ -44,24 +52,26 @@ function togglePlayer() {
 }
 
 function startNewGame() {
-  rollTheDice();
-  playerOneCurrentScorePlaceholder.textContent = '0';
-  playerTwoCurrentScorePlaceholder.textContent = '0';
-  playerOneScorePlaceholder.textContent = '0';
-  playerTwoScorePlaceholder.textContent = '0';
+  playerOneScore.finalScore = 0;
+  playerOneScore.currentScore = 0;
+  playerTwoScore.finalScore = 0;
+  playerTwoScore.currentScore = 0;
+  playerOneCurrentScorePlaceholder.textContent = playerOneScore.currentScore;
+  playerTwoCurrentScorePlaceholder.textContent = playerTwoScore.currentScore;
+  playerOneScorePlaceholder.textContent = playerOneScore.finalScore;
+  playerTwoScorePlaceholder.textContent = playerTwoScore.finalScore;
+}
+
+function hasDiceReturnedOne(item) {
+  return imageSrcList.indexOf(item) === 0;
 }
 
 function rollTheDice() {
-  const imageSrcList = [
-    'dice-5.png',
-    'dice-1.png',
-    'dice-2.png',
-    'dice-3.png',
-    'dice-4.png',
-    'dice-6.png',
-  ];
   const randomIndex = Math.trunc(Math.random() * 6);
   document.querySelector('.dice').src = `${imageSrcList[randomIndex]}`;
+  if (hasDiceReturnedOne(imageSrcList[randomIndex])) {
+    hold();
+  }
   if (playerOneSection.classList.contains('player--active')) {
     playerOneScore.currentScore++;
     playerOneCurrentScorePlaceholder.textContent = playerOneScore.currentScore;
