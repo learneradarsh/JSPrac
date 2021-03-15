@@ -27,18 +27,31 @@ const playerTwoScore = {
 
 startNewGame();
 
+document.querySelector('.btn--roll').addEventListener('click', rollTheDice);
+document.querySelector('.btn--new').addEventListener('click', startNewGame);
+document.querySelector('.btn--hold').addEventListener('click', hold);
+
+// utils
+function displayPlayerOneScore() {
+  playerOneScorePlaceholder.textContent = playerOneScore.finalScore;
+  playerOneCurrentScorePlaceholder.textContent = playerOneScore.currentScore;
+}
+
+function displayPlayerTwoScore() {
+  playerTwoScorePlaceholder.textContent = playerTwoScore.finalScore;
+  playerTwoCurrentScorePlaceholder.textContent = playerTwoScore.currentScore;
+}
+
 function updatePlayerOneScore() {
   playerOneScore.finalScore += playerOneScore.currentScore;
   playerOneScore.currentScore = 0;
-  playerOneScorePlaceholder.textContent = playerOneScore.finalScore;
-  playerOneCurrentScorePlaceholder.textContent = playerOneScore.currentScore;
+  displayPlayerOneScore();
 }
 
 function updatePlayerTwoScore() {
   playerTwoScore.finalScore += playerTwoScore.currentScore;
   playerTwoScore.currentScore = 0;
-  playerTwoScorePlaceholder.textContent = playerTwoScore.finalScore;
-  playerTwoCurrentScorePlaceholder.textContent = playerTwoScore.currentScore;
+  displayPlayerTwoScore();
 }
 
 function togglePlayer() {
@@ -56,10 +69,8 @@ function startNewGame() {
   playerOneScore.currentScore = 0;
   playerTwoScore.finalScore = 0;
   playerTwoScore.currentScore = 0;
-  playerOneCurrentScorePlaceholder.textContent = playerOneScore.currentScore;
-  playerTwoCurrentScorePlaceholder.textContent = playerTwoScore.currentScore;
-  playerOneScorePlaceholder.textContent = playerOneScore.finalScore;
-  playerTwoScorePlaceholder.textContent = playerTwoScore.finalScore;
+  displayPlayerOneScore();
+  displayPlayerTwoScore();
 }
 
 function hasDiceReturnedOne(item) {
@@ -89,7 +100,3 @@ function hold() {
   }
   togglePlayer();
 }
-
-document.querySelector('.btn--roll').addEventListener('click', rollTheDice);
-document.querySelector('.btn--new').addEventListener('click', startNewGame);
-document.querySelector('.btn--hold').addEventListener('click', hold);
