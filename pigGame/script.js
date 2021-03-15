@@ -32,16 +32,6 @@ document.querySelector('.btn--new').addEventListener('click', startNewGame);
 document.querySelector('.btn--hold').addEventListener('click', hold);
 
 // utils
-function displayPlayerOneScore() {
-  playerOneScorePlaceholder.textContent = playerOneScore.finalScore;
-  playerOneCurrentScorePlaceholder.textContent = playerOneScore.currentScore;
-}
-
-function displayPlayerTwoScore() {
-  playerTwoScorePlaceholder.textContent = playerTwoScore.finalScore;
-  playerTwoCurrentScorePlaceholder.textContent = playerTwoScore.currentScore;
-}
-
 function updatePlayerOneScore() {
   playerOneScore.finalScore += playerOneScore.currentScore;
   playerOneScore.currentScore = 0;
@@ -80,6 +70,9 @@ function hasDiceReturnedOne(item) {
 function rollTheDice() {
   const randomIndex = Math.trunc(Math.random() * 6);
   document.querySelector('.dice').src = `${imageSrcList[randomIndex]}`;
+  if (isGameWon()) {
+    return;
+  }
   if (hasDiceReturnedOne(imageSrcList[randomIndex])) {
     hold();
   }
@@ -93,10 +86,30 @@ function rollTheDice() {
 }
 
 function hold() {
-  if (playerOneSection.classList.contains('player--active')) {
-    updatePlayerOneScore();
-  } else {
-    updatePlayerTwoScore();
-  }
+  playerOneSection.classList.contains('player--active')
+    ? updatePlayerOneScore()
+    : updatePlayerTwoScore();
   togglePlayer();
+}
+
+function isGameWon() {
+  if (playerOneScore.finalScore >= 100) {
+    alert(`player one won with ${playerOneScore.finalScore}!`);
+    return true;
+  } else if (playerTwoScore.finalScore >= 100) {
+    alert(`player two won! with ${playerTwoScore.finalScore}`);
+    return true;
+  } else {
+    return false;
+  }
+}
+
+function displayPlayerOneScore() {
+  playerOneScorePlaceholder.textContent = playerOneScore.finalScore;
+  playerOneCurrentScorePlaceholder.textContent = playerOneScore.currentScore;
+}
+
+function displayPlayerTwoScore() {
+  playerTwoScorePlaceholder.textContent = playerTwoScore.finalScore;
+  playerTwoCurrentScorePlaceholder.textContent = playerTwoScore.currentScore;
 }
