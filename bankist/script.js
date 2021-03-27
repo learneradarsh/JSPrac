@@ -103,13 +103,16 @@ const inputLoanAmount = document.querySelector(".form__input--loan-amount");
 const inputCloseUsername = document.querySelector(".form__input--user");
 const inputClosePin = document.querySelector(".form__input--pin");
 
-function displayMovements(movements) {
+function displayMovements(acc) {
   containerMovements.innerHTML = "";
-  movements.forEach(function (movement, index) {
+  acc.movements.forEach(function (movement, index) {
     const type = movement > 0 ? "deposit" : "withdrawal";
     const html = `
     <div class="movements__row">
         <div class="movements__type movements__type--${type}">${index} deposit</div>
+        <div class="movements__date">${formatDate(
+          acc.movementsDates[index]
+        )}</div>
         <div class="movements__value">${movement}€</div>
     </div>
       `;
@@ -142,7 +145,7 @@ function calcAndDisplaySummary(account) {
     .reduce((acc, mov) => {
       return acc + mov;
     }, 0);
-  labelSumIn.textContent = `${totalIn}€`;
+  labelSumIn.textContent = `${totalIn.toFixed(2)}€`;
 
   const totalOut = account.movements
     .filter((mov) => mov < 0)
@@ -150,7 +153,7 @@ function calcAndDisplaySummary(account) {
       return acc + mov;
     }, 0);
 
-  labelSumOut.textContent = `${totalOut}€`;
+  labelSumOut.textContent = `${totalOut.toFixed(2)}€`;
 
   const totalInterest = account.movements
     .filter((mov) => mov > 0)
@@ -165,6 +168,21 @@ function isUserExist(username) {
   return accounts.find((account) => account.username === username);
 }
 
+function formatDate(date) {
+  const config = {
+    hour: "numeric",
+    minute: "numeric",
+    day: "numeric",
+    month: "numeric",
+    year: "numeric",
+  };
+  const now = new Date(date);
+  const userLocale = navigator.language;
+  const formattedDate = new Intl.DateTimeFormat(userLocale, config).format(now);
+  return formattedDate;
+}
+
+// login
 let currentAccount;
 
 btnLogin.addEventListener("click", function (e) {
@@ -172,13 +190,12 @@ btnLogin.addEventListener("click", function (e) {
   currentAccount = accounts.find(
     (account) => account.username === inputLoginUsername.value
   );
-  console.log(currentAccount);
 
   // pin authentication
   if (currentAccount?.pin === Number(inputLoginPin.value)) {
     // show main panel
     containerApp.style.opacity = "100";
-
+    labelDate.textContent = new Date();
     // reset username and password text fields
     inputLoginUsername.value = inputLoginPin.value = "";
 
@@ -192,7 +209,7 @@ btnLogin.addEventListener("click", function (e) {
 });
 
 function updateInfoOnDisplay(accountInfo) {
-  displayMovements(accountInfo.movements);
+  displayMovements(accountInfo);
   calcAndDisplaySummary(accountInfo);
   calcAndDisplayTotalBalance(accountInfo);
 }
