@@ -207,15 +207,17 @@ btnLogin.addEventListener("click", function (e) {
     //start timer
     let timer = 10;
     labelTimer.textContent = timer;
-    const timeClock = setInterval(function () {
+    const tick = function () {
       const now = new Date();
       labelTimer.textContent = timer; //`${now.getMinutes()}:${now.getSeconds()}`;
-      --timer;
       if (timer === 0) {
         clearInterval(timeClock);
         logoutUser();
       }
-    }, 1000);
+      --timer;
+    };
+    tick();
+    const timeClock = setInterval(tick, 1000);
 
     //show details for current account
     labelWelcome.textContent = `Welcome Back ${currentAccount.owner}`;
