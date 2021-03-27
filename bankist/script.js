@@ -188,7 +188,7 @@ function logoutUser() {
 }
 
 // login
-let currentAccount;
+let currentAccount, timeClock, timer;
 
 btnLogin.addEventListener("click", function (e) {
   e.preventDefault();
@@ -205,7 +205,10 @@ btnLogin.addEventListener("click", function (e) {
     inputLoginUsername.value = inputLoginPin.value = "";
 
     //start timer
-    let timer = 10;
+    if (timer) {
+      clearInterval(timeClock);
+    }
+    timer = 100;
     labelTimer.textContent = timer;
     const tick = function () {
       const now = new Date();
@@ -217,7 +220,7 @@ btnLogin.addEventListener("click", function (e) {
       --timer;
     };
     tick();
-    const timeClock = setInterval(tick, 1000);
+    timeClock = setInterval(tick, 1000);
 
     //show details for current account
     labelWelcome.textContent = `Welcome Back ${currentAccount.owner}`;
