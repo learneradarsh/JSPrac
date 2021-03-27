@@ -192,6 +192,38 @@ btnClose.addEventListener("click", function (e) {
   }
 });
 
+// loan functionality
+btnLoan.addEventListener("click", function (e) {
+  e.preventDefault();
+  const amount = Number(inputLoanAmount.value);
+  if (
+    amount > 0 &&
+    currentAccount.movements.some((movement) => movement >= amount * 0.1)
+  ) {
+    currentAccount.movements.push(amount);
+    updateInfoOnDisplay(currentAccount);
+  } else {
+    alert(
+      "Sorry, you are not eligible for loan or you have entered wrong amount"
+    );
+  }
+  inputLoanAmount.value = "";
+});
+
+// sort movements
+let clickToggle = true;
+btnSort.addEventListener("click", function (e) {
+  e.preventDefault();
+  if (clickToggle) {
+    currentAccount.movements.sort((a, b) => a - b);
+    clickToggle = !clickToggle;
+  } else {
+    currentAccount.movements.sort((a, b) => b - a);
+    clickToggle = !clickToggle;
+  }
+  updateInfoOnDisplay(currentAccount);
+});
+
 /////////////////////////////////////////////////
 /////////////////////////////////////////////////
 // LECTURES
@@ -203,4 +235,52 @@ const currencies = new Map([
 ]);
 
 const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
+// let totalTransactionList = [];
+// accounts.forEach((account) => {
+//   totalTransactionList.push(...account.movements);
+// });
+// const totalMoneyInTheBank = totalTransactionList.reduce((acc, trans) => {
+//   return acc + trans;
+// }, 0);
+// console.log(totalMoneyInTheBank);
+let totalTransactionList = [];
+const totalMoneyInTheBank = accounts
+  .map((account) => account.movements)
+  .flat()
+  .filter((deposit) => deposit > 0)
+  .reduce((acc, mov) => {
+    return acc + mov;
+  }, 0);
+// const totalMoneyInTheBank = totalTransactionList.reduce((acc, trans) => {
+//   return acc + trans;
+// }, 0);
+console.log(totalMoneyInTheBank);
+
+const oneThList = accounts
+  .map((account) => account.movements)
+  .flat()
+  .reduce((count, mov) => {
+    return mov > 1000 ? count + 1 : count;
+  }, 0);
+console.log(oneThList);
+
+const infoObj = accounts
+  .map((acc) => acc.movements)
+  .flat()
+  .reduce(
+    (acc, mov) => {
+      //   if (mov > 0) {
+      //     acc.deposit = acc.deposit + mov;
+      //   } else {
+      //     acc.withdrawl = acc.withdrawl + mov;
+      //   }
+      mov > 0 ? (acc.deposit += mov) : (acc.withdrawl += mov);
+      return acc;
+    },
+    {
+      deposit: 0,
+      withdrawl: 0,
+    }
+  );
+console.log(infoObj);
 /////////////////////////////////////////////////
