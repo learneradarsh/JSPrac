@@ -182,6 +182,11 @@ function formatDate(date) {
   return formattedDate;
 }
 
+function logoutUser() {
+  containerApp.style.opacity = "0";
+  labelWelcome.textContent = `Log in to get started`;
+}
+
 // login
 let currentAccount;
 
@@ -198,6 +203,19 @@ btnLogin.addEventListener("click", function (e) {
     labelDate.textContent = new Date();
     // reset username and password text fields
     inputLoginUsername.value = inputLoginPin.value = "";
+
+    //start timer
+    let timer = 10;
+    labelTimer.textContent = timer;
+    const timeClock = setInterval(function () {
+      const now = new Date();
+      labelTimer.textContent = timer; //`${now.getMinutes()}:${now.getSeconds()}`;
+      --timer;
+      if (timer === 0) {
+        clearInterval(timeClock);
+        logoutUser();
+      }
+    }, 1000);
 
     //show details for current account
     labelWelcome.textContent = `Welcome Back ${currentAccount.owner}`;
