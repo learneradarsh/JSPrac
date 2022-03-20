@@ -1,12 +1,14 @@
-class RecipeView {
-  _recipeContainer = document.querySelector('.recipe');
+import GenericView from './GenericView';
+
+class RecipeView extends GenericView {
+  _parentElement = document.querySelector('.recipe');
   _data;
 
   render(data) {
     this._data = data;
     const markup = this.generateTemplate();
     this.clear();
-    this._recipeContainer.insertAdjacentHTML('afterbegin', markup);
+    this._parentElement.insertAdjacentHTML('afterbegin', markup);
   }
 
   generateTemplate() {
@@ -102,34 +104,8 @@ class RecipeView {
     </div>`;
   }
 
-  clear() {
-    this._recipeContainer.innerHTML = '';
-  }
-
-  spinloader() {
-    const loaderTemplate = `<div class="spinner">
-    <h2>Loading...</h2>
-    <svg>
-      <use href="src/img/icons.svg#icon-loader"></use>
-    </svg>
-  </div>`;
-    console.log('loading...');
-    this.clear();
-    this._recipeContainer.insertAdjacentHTML('afterbegin', loaderTemplate);
-  }
-
-  renderError(message = 'This is default error message') {
-    const errorTemplate = `<div class="error">
-      <div>
-        <svg>
-          <use href="src/img/icons.svg#icon-alert-triangle"></use>
-        </svg>
-      </div>
-      <p>${message}</p>
-    </div>`;
-    console.error(message);
-    this.clear();
-    this._recipeContainer.insertAdjacentHTML('afterbegin', errorTemplate);
+  addHandlerRender(handler) {
+    ['hashchange', 'load'].forEach(ev => window.addEventListener(ev, handler));
   }
 }
 
