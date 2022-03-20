@@ -3,11 +3,11 @@ import recipeView from './views/RecipeView';
 
 const controlRecipe = async () => {
   try {
+    recipeView.spinloader();
     await model.getRecipeFromAPI();
-    recipeView.spinloader(true);
     recipeView.render(model.state.recipe);
   } catch (error) {
-    console.log(error);
+    recipeView.renderError(error);
   }
 };
 

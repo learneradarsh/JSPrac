@@ -4,9 +4,8 @@ class RecipeView {
 
   render(data) {
     this._data = data;
-    this.spinloader(false);
     const markup = this.generateTemplate();
-    this._recipeContainer.innerHTML = '';
+    this.clear();
     this._recipeContainer.insertAdjacentHTML('afterbegin', markup);
   }
 
@@ -103,19 +102,34 @@ class RecipeView {
     </div>`;
   }
 
-  spinloader(status) {
+  clear() {
+    this._recipeContainer.innerHTML = '';
+  }
+
+  spinloader() {
     const loaderTemplate = `<div class="spinner">
+    <h2>Loading...</h2>
     <svg>
       <use href="src/img/icons.svg#icon-loader"></use>
     </svg>
   </div>`;
-    if (status) {
-      console.log('loading...');
-      this._recipeContainer.innerHTML = '';
-      this._recipeContainer.insertAdjacentHTML('afterbegin', loaderTemplate);
-    } else {
-      this._recipeContainer.innerHTML = '';
-    }
+    console.log('loading...');
+    this.clear();
+    this._recipeContainer.insertAdjacentHTML('afterbegin', loaderTemplate);
+  }
+
+  renderError(message = 'This is default error message') {
+    const errorTemplate = `<div class="error">
+      <div>
+        <svg>
+          <use href="src/img/icons.svg#icon-alert-triangle"></use>
+        </svg>
+      </div>
+      <p>${message}</p>
+    </div>`;
+    console.error(message);
+    this.clear();
+    this._recipeContainer.insertAdjacentHTML('afterbegin', errorTemplate);
   }
 }
 

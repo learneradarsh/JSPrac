@@ -11,7 +11,7 @@ export const getRecipeFromAPI = async () => {
     recipe = transformRecipeResponseFormat(recipe.data.recipe);
     state.recipe = recipe;
   } catch (error) {
-    alert(error);
+    throw error;
   }
 };
 
